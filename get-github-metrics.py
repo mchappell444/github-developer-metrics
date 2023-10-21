@@ -1,43 +1,53 @@
+import datetime
 import csv
 from github import Github
-import datetime
 
 # GitHub Configuration
-GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN'
-REPOSITORY = 'OWNER/REPO_NAME'
+GITHUB_TOKEN = "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"
+REPOSITORY = "OWNER/REPO_NAME"
 START_DATE = datetime.datetime(2023, 9, 1)  # Example date
-END_DATE = datetime.datetime(2023, 9, 23)   # Example date
+END_DATE = datetime.datetime(2023, 9, 23)  # Example date
 
 # CSV Configuration
-CSV_FILENAME = 'github_metrics.csv'
+CSV_FILENAME = "github_metrics.csv"
 
 # Initialize Github instance
 g = Github(GITHUB_TOKEN)
 repo = g.get_repo(REPOSITORY)
 
 # Fetch Pull Requests
-pull_requests = repo.get_pulls(state='all')
+pull_requests = repo.get_pulls(state="all")
 
 # Prepare data for CSV
 data = []
-headers = ["Username", "Created At", "Merged At", "Number of Comments", "Additions", "Deletions", "Review Requests"]
+headers = [
+    "Username",
+    "Created At",
+    "Merged At",
+    "Number of Comments",
+    "Additions",
+    "Deletions",
+    "Review Requests",
+]
 data.append(headers)
 
 for pr in pull_requests:
     created_at = pr.created_at
     if START_DATE <= created_at <= END_DATE:
-        data.append([
-            pr.user.login, 
-            pr.created_at, 
-            pr.merged_at, 
-            len(pr.get_comments()),
-            pr.additions,
-            pr.deletions,
-            len(pr.get_review_requests())
-        ])
+        data.append(
+            [
+                pr.user.login,
+                pr.created_at,
+                pr.merged_at,
+                len(pr.get_comments()),
+                pr.additions,
+                pr.deletions,
+                len(pr.get_review_requests()),
+            ]
+        )
 
 # Export data to CSV
-with open(CSV_FILENAME, 'w', newline='') as csvfile:
+with open(CSV_FILENAME, "w", newline="") as csvfile:
     csvwriter = csv.writer(csvfile)
     csvwriter.writerows(data)
 
