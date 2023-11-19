@@ -1,9 +1,10 @@
+import os
 import datetime
 import csv
 from github import Github
 
 # GitHub Configuration
-GITHUB_TOKEN = "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"
+GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 REPOSITORY = "mchappell444/github-basics"
 START_DATE = datetime.datetime(2023, 9, 1)  # Example date
 END_DATE = datetime.datetime(2023, 9, 23)  # Example date
